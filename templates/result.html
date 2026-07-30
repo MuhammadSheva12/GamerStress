@@ -1,0 +1,298 @@
+{% extends 'base.html' %} {% block title %}Hasil Prediksi - GamerStress{%
+endblock %} {% block content %}
+
+<style>
+  .glow-orb-sm {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.35),
+      transparent 70%
+    );
+    transform: translateX(-50%);
+    filter: blur(40px);
+    animation: driftGlow 14s ease-in-out infinite;
+  }
+  @keyframes driftGlow {
+    0%,
+    100% {
+      transform: translate(-50%, 0) scale(1);
+    }
+    50% {
+      transform: translate(-42%, 4%) scale(1.08);
+    }
+  }
+  .hero-fade {
+    animation: heroFade 0.7s ease-out both;
+  }
+  .hero-fade.d1 {
+    animation-delay: 0.05s;
+  }
+  .hero-fade.d2 {
+    animation-delay: 0.15s;
+  }
+  @keyframes heroFade {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .section-card {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .section-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow-orb-sm,
+    .hero-fade {
+      animation: none;
+    }
+  }
+</style>
+
+<div class="pb-10">
+
+  {% if hasil in ['Stres Rendah', 'Stres Sedang', 'Stres Tinggi'] %}
+
+  <!-- ============ HERO (HUD Gelap, versi ringkas) ============ -->
+  <section
+    class="relative -mx-4 sm:-mx-8 lg:-mx-16 -mt-3 mb-10 overflow-hidden bg-[#0F0E24] rounded-b-3xl"
+  >
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="glow-orb-sm"></div>
+    </div>
+
+    <div
+      class="relative max-w-3xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 sm:pt-16 pb-10 text-center"
+    >
+      <span
+        class="hero-fade inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-indigo-300/90 border border-indigo-400/30 rounded-full px-4 py-1.5 bg-indigo-500/10"
+      >
+        Random Forest • Akurasi 83,87%
+      </span>
+
+      <h1
+        class="hero-fade d1 font-display font-bold text-3xl sm:text-5xl leading-[1.1] mt-6 text-white tracking-tight"
+      >
+        Hasil Prediksi<br />
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300"
+          >Tingkat Stresmu</span
+        >
+      </h1>
+
+      <p
+        class="hero-fade d2 text-indigo-100/60 text-sm sm:text-base max-w-xl mx-auto mt-5 leading-relaxed"
+      >
+        Berdasarkan pola bermainmu, berikut estimasi tingkat stres beserta
+        analisis dan faktor yang paling berpengaruh.
+      </p>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Kartu Hasil Utama -->
+    <div
+      class="section-card md:col-span-1 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm flex flex-col items-center justify-center text-center"
+    >
+      {% if hasil == 'Stres Rendah' %}
+      <div class="w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center mb-4">
+        <span class="text-4xl">😊</span>
+      </div>
+      <span class="bg-emerald-50 text-emerald-600 text-xs font-semibold px-3 py-1 rounded-full mb-3 font-mono tracking-wide">RENDAH</span>
+      {% elif hasil == 'Stres Sedang' %}
+      <div class="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center mb-4">
+        <span class="text-4xl">😐</span>
+      </div>
+      <span class="bg-amber-50 text-amber-600 text-xs font-semibold px-3 py-1 rounded-full mb-3 font-mono tracking-wide">SEDANG</span>
+      {% else %}
+      <div class="w-24 h-24 rounded-full bg-rose-50 flex items-center justify-center mb-4">
+        <span class="text-4xl">😰</span>
+      </div>
+      <span class="bg-rose-50 text-rose-600 text-xs font-semibold px-3 py-1 rounded-full mb-3 font-mono tracking-wide">TINGGI</span>
+      {% endif %}
+
+      <p class="text-gray-400 text-xs font-mono uppercase tracking-wider mb-1">Tingkat Keyakinan Model</p>
+      <p class="font-display text-5xl font-bold text-[#1E1B4B] mb-3">{{ probabilitas[hasil] }}<span class="text-2xl">%</span></p>
+
+      {% if hasil == 'Stres Rendah' %}
+      <p class="text-lg font-bold text-emerald-600 mb-2">Stres Rendah</p>
+      {% elif hasil == 'Stres Sedang' %}
+      <p class="text-lg font-bold text-amber-600 mb-2">Stres Sedang</p>
+      {% else %}
+      <p class="text-lg font-bold text-rose-600 mb-2">Stres Tinggi</p>
+      {% endif %}
+
+      <!-- Distribusi probabilitas 3 kelas -->
+      <div class="w-full mt-4 pt-4 border-t border-gray-100">
+        <p class="text-[10px] font-mono uppercase tracking-widest text-gray-400 mb-2">Distribusi Probabilitas</p>
+        <div class="space-y-2">
+          <div>
+            <div class="flex justify-between text-[11px] font-mono mb-0.5">
+              <span class="text-emerald-600">Rendah</span>
+              <span class="text-gray-400">{{ probabilitas['Stres Rendah'] }}%</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5">
+              <div class="bg-emerald-400 h-1.5 rounded-full" style="width: {{ probabilitas['Stres Rendah'] }}%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-mono mb-0.5">
+              <span class="text-amber-600">Sedang</span>
+              <span class="text-gray-400">{{ probabilitas['Stres Sedang'] }}%</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5">
+              <div class="bg-amber-400 h-1.5 rounded-full" style="width: {{ probabilitas['Stres Sedang'] }}%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-mono mb-0.5">
+              <span class="text-rose-600">Tinggi</span>
+              <span class="text-gray-400">{{ probabilitas['Stres Tinggi'] }}%</span>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5">
+              <div class="bg-rose-400 h-1.5 rounded-full" style="width: {{ probabilitas['Stres Tinggi'] }}%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kartu Analisis & Saran -->
+    <div class="md:col-span-2 flex flex-col gap-6">
+      <!-- Analisis -->
+      <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-[#6366F1] mb-1">Interpretasi Model</p>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B] mb-3">Analisis</h3>
+        {% if hasil == 'Stres Rendah' %}
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Pola bermain Anda tergolong sehat. Tingkat stres rendah menunjukkan
+          Anda mampu menikmati game tanpa tekanan berlebihan. Pertahankan
+          kebiasaan bermain yang seimbang.
+        </p>
+        {% elif hasil == 'Stres Sedang' %}
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Pola bermain kompetitif dengan durasi tinggi berkontribusi pada
+          tekanan moderat. Disarankan mengatur jadwal bermain dan mengambil jeda
+          rutin.
+        </p>
+        {% else %}
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Tingkat stres Anda tergolong tinggi. Intensitas bermain yang
+          berlebihan dan orientasi kompetitif berkontribusi signifikan. Sangat
+          disarankan untuk mengurangi durasi bermain dan mencari aktivitas
+          relaksasi.
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- Faktor Berpengaruh -->
+      {% if faktor_list %}
+      <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-[#6366F1] mb-1">Feature Importance</p>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B] mb-4">
+          Faktor Paling Berpengaruh
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {% for faktor in faktor_list %}
+          <span
+            class="bg-indigo-50 text-[#6366F1] text-xs font-semibold px-4 py-2 rounded-full border border-indigo-100 font-mono"
+          >
+            {{ faktor }}
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Catatan -->
+      <p class="text-[11px] text-gray-400 leading-relaxed">
+        ⚠️ Hasil ini bersifat estimatif dan merupakan produk penelitian skripsi,
+        bukan alat diagnosis klinis. Jika Anda merasa mengalami stres berat,
+        disarankan berkonsultasi dengan psikolog atau tenaga profesional.
+      </p>
+
+      <!-- Tombol Aksi -->
+      <div class="flex gap-4">
+        <a
+          href="/predict"
+          class="inline-flex items-center gap-2 bg-gradient-to-br from-[#1E1B4B] to-[#3730A3] hover:from-[#171337] hover:to-[#312a8a] text-white px-6 py-3 rounded-full font-semibold transition shadow-md text-sm"
+        >
+          Prediksi Ulang
+        </a>
+        <a
+          href="/dataset"
+          class="border border-gray-200 text-gray-500 hover:bg-gray-50 px-6 py-3 rounded-full font-semibold transition text-sm"
+        >
+          Lihat Dataset
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+
+  <!-- Empty state: belum ada hasil (akses langsung ke /result tanpa isi form) -->
+
+  <!-- ============ HERO (HUD Gelap, versi ringkas) ============ -->
+  <section
+    class="relative -mx-4 sm:-mx-8 lg:-mx-16 -mt-3 mb-10 overflow-hidden bg-[#0F0E24] rounded-b-3xl"
+  >
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="glow-orb-sm"></div>
+    </div>
+
+    <div
+      class="relative max-w-3xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 sm:pt-16 pb-10 text-center"
+    >
+      <span
+        class="hero-fade inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-indigo-300/90 border border-indigo-400/30 rounded-full px-4 py-1.5 bg-indigo-500/10"
+      >
+        Belum Ada Hasil
+      </span>
+
+      <h1
+        class="hero-fade d1 font-display font-bold text-3xl sm:text-5xl leading-[1.1] mt-6 text-white tracking-tight"
+      >
+        Isi Dulu Data<br />
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300"
+          >Pola Bermainmu.</span
+        >
+      </h1>
+
+      <p
+        class="hero-fade d2 text-indigo-100/60 text-sm sm:text-base max-w-xl mx-auto mt-5 leading-relaxed"
+      >
+        Lengkapi data pola bermain di halaman Prediksi untuk melihat estimasi
+        tingkat stresmu.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-md mx-auto text-center py-6">
+    <div class="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-5">
+      <span class="text-3xl">🎮</span>
+    </div>
+    <a
+      href="/predict"
+      class="inline-flex items-center gap-2 bg-gradient-to-br from-[#1E1B4B] to-[#3730A3] hover:from-[#171337] hover:to-[#312a8a] text-white px-6 py-3 rounded-full font-semibold transition shadow-md text-sm"
+    >
+      Mulai Prediksi →
+    </a>
+  </div>
+
+  {% endif %}
+
+</div>
+
+{% endblock %}

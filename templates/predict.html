@@ -1,0 +1,372 @@
+{% extends 'base.html' %} {% block title %}Prediksi - GamerStress{% endblock %}
+{% block content %}
+
+<style>
+  .glow-orb-sm {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.35),
+      transparent 70%
+    );
+    transform: translateX(-50%);
+    filter: blur(40px);
+    animation: driftGlow 14s ease-in-out infinite;
+  }
+  @keyframes driftGlow {
+    0%,
+    100% {
+      transform: translate(-50%, 0) scale(1);
+    }
+    50% {
+      transform: translate(-42%, 4%) scale(1.08);
+    }
+  }
+  .hero-fade {
+    animation: heroFade 0.7s ease-out both;
+  }
+  .hero-fade.d1 {
+    animation-delay: 0.05s;
+  }
+  .hero-fade.d2 {
+    animation-delay: 0.15s;
+  }
+  @keyframes heroFade {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .section-card {
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .section-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow-orb-sm,
+    .hero-fade {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- ============ HERO (HUD Gelap, versi ringkas) ============ -->
+<section
+  class="relative -mx-4 sm:-mx-8 lg:-mx-16 -mt-3 mb-10 overflow-hidden bg-[#0F0E24] rounded-b-3xl"
+>
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="glow-orb-sm"></div>
+  </div>
+
+  <div
+    class="relative max-w-3xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 sm:pt-16 pb-10 text-center"
+  >
+    <span
+      class="hero-fade inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-indigo-300/90 border border-indigo-400/30 rounded-full px-4 py-1.5 bg-indigo-500/10"
+    >
+      Formulir Prediksi
+    </span>
+
+    <h1
+      class="hero-fade d1 font-display font-bold text-3xl sm:text-5xl leading-[1.1] mt-6 text-white tracking-tight"
+    >
+      Input Pola Kebiasaan<br />
+      <span
+        class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300"
+        >Bermainmu</span
+      >
+    </h1>
+
+    <p
+      class="hero-fade d2 text-indigo-100/60 text-sm sm:text-base max-w-xl mx-auto mt-5 leading-relaxed"
+    >
+      Lengkapi data bermain di bawah ini untuk mendapatkan estimasi tingkat
+      stres berbasis model Random Forest. Tidak perlu login atau mengisi
+      identitas pribadi.
+    </p>
+  </div>
+</section>
+
+<div class="pb-6">
+  {% if error %}
+  <div
+    class="bg-rose-50 border border-rose-200 text-rose-600 text-sm rounded-lg px-4 py-3 mb-6"
+  >
+    ⚠️ {{ error }}
+  </div>
+  {% endif %}
+
+  <form action="/predict" method="POST">
+    <!-- Section 1: Karakteristik Umum -->
+    <div
+      class="section-card bg-white border border-gray-200 rounded-2xl p-8 mb-6 shadow-sm"
+    >
+      <p
+        class="font-mono text-[11px] tracking-[0.2em] uppercase text-[#6366F1] mb-1"
+      >
+        Bagian 1
+      </p>
+      <h3 class="font-display text-lg font-bold text-[#1E1B4B] mb-6">
+        Karakteristik Umum
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Usia *</label
+          >
+          <select
+            name="usia"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>< 17 tahun</option>
+            <option>17–20 tahun</option>
+            <option>21–24 tahun</option>
+            <option>25–28 tahun</option>
+            <option>> 28 tahun</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Jenis Kelamin *</label
+          >
+          <select
+            name="jenis_kelamin"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Laki-laki</option>
+            <option>Perempuan</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Status Utama *</label
+          >
+          <select
+            name="status"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Pelajar/Mahasiswa</option>
+            <option>Bekerja</option>
+            <option>Pelajar/Mahasiswa sambil bekerja</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Pola Bermain -->
+    <div
+      class="section-card bg-white border border-gray-200 rounded-2xl p-8 mb-6 shadow-sm"
+    >
+      <p
+        class="font-mono text-[11px] tracking-[0.2em] uppercase text-[#6366F1] mb-1"
+      >
+        Bagian 2
+      </p>
+      <h3 class="font-display text-lg font-bold text-[#1E1B4B] mb-6">
+        Data Pola Kebiasaan Bermain
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Rata-rata Durasi Per Sesi *</label
+          >
+          <select
+            name="durasi"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Kurang dari 30 menit</option>
+            <option>30–60 menit</option>
+            <option>61–120 menit</option>
+            <option>121–180 menit</option>
+            <option>Lebih dari 180 menit</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Sesi Per Hari *</label
+          >
+          <select
+            name="sesi_per_hari"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>1 sesi</option>
+            <option>2 sesi</option>
+            <option>3 sesi</option>
+            <option>4 sesi</option>
+            <option>Lebih dari 4 sesi</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Waktu Mulai Bermain *</label
+          >
+          <select
+            name="waktu_mulai"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Pagi (05.00–10.59)</option>
+            <option>Siang (11.00–14.59)</option>
+            <option>Sore (15.00–17.59)</option>
+            <option>Malam (18.00–23.59)</option>
+            <option>Dini hari (00.00–04.59)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Win Rate Akun *</label
+          >
+
+          <select
+            name="win_rate"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Kurang dari 45%</option>
+            <option>45%–49%</option>
+            <option>50%–54%</option>
+            <option>55%–59%</option>
+            <option>60% atau lebih</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Kekalahan Beruntun Terbanyak *</label
+          >
+          <select
+            name="kekalahan_beruntun"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Tidak pernah kalah beruntun</option>
+            <option>2 kali</option>
+            <option>3 kali</option>
+            <option>4 kali</option>
+            <option>5 kali atau lebih</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Orientasi Bermain *</label
+          >
+          <select
+            name="orientasi"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option value="Kasual">
+              Pemain Kasual — bermain untuk hiburan/bersantai
+            </option>
+            <option value="Kompetitif">
+              Pemain Kompetitif — bermain untuk meningkatkan performa/rank
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Mode Permainan *</label
+          >
+          <select
+            name="mode_game"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Ranked</option>
+            <option>Classic</option>
+            <option>Brawl</option>
+            <option>Mode lainnya</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Cara Bermain *</label
+          >
+          <select
+            name="cara_bermain"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option value="Solo">Solo — bermain sendiri</option>
+            <option value="Duo/Trio/Squad">
+              Duo / Trio / Squad bersama teman
+            </option>
+            <option value="Komunitas">Bersama anggota komunitas / grup</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1E1B4B] mb-2"
+            >Rank Saat Ini *</label
+          >
+
+          <select
+            name="rank"
+            required
+            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+          >
+            <option value="" disabled selected>-- Pilih --</option>
+            <option>Warrior</option>
+            <option>Elite</option>
+            <option>Master</option>
+            <option>Grandmaster</option>
+            <option>Epic</option>
+            <option>Legend</option>
+            <option>Mythic</option>
+            <option>Mythical Honor</option>
+            <option>Mythical Glory</option>
+            <option>Mythical Immortal</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="text-right">
+      <button
+        type="submit"
+        class="inline-flex items-center gap-2 bg-gradient-to-br from-[#1E1B4B] to-[#3730A3] hover:from-[#171337] hover:to-[#312a8a] text-white px-8 py-3 rounded-full font-semibold text-sm transition shadow-md"
+      >
+        Lihat Hasil Prediksi
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

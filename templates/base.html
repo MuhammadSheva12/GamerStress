@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}GamerStress{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Plus Jakarta Sans", "sans-serif"],
+              display: ["Rajdhani", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-[#F8F7FF] text-[#1E1B4B] min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-200 px-6 py-4 shadow-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="/" class="flex items-center gap-2 text-xl font-bold text-[#6366F1]">
+          GamerStress
+        </a>
+        <div class="flex gap-8 text-sm font-medium">
+          <a href="/" class="transition {% if request.path == '/' %}text-[#6366F1]{% else %}text-[#1E1B4B] hover:text-[#6366F1]{% endif %}">Beranda</a>
+          <a href="/predict" class="transition {% if request.path == '/predict' %}text-[#6366F1]{% else %}text-[#1E1B4B] hover:text-[#6366F1]{% endif %}">Prediksi</a>
+          <a href="/dataset" class="transition {% if request.path == '/dataset' %}text-[#6366F1]{% else %}text-[#1E1B4B] hover:text-[#6366F1]{% endif %}">Dataset</a>
+          <a href="/about" class="transition {% if request.path == '/about' %}text-[#6366F1]{% else %}text-[#1E1B4B] hover:text-[#6366F1]{% endif %}">Tentang</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Konten -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-3 flex-1 w-full">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray text-center text-xs text-gray-400 py-3">
+      © 2026 GamerStress · Muhammad Sheva Adyaksa Rohendi · Universitas Nusa Putra
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

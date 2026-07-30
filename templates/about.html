@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Tentang - GamerStress{% endblock %}
+
+{% block content %}
+
+<style>
+  .glow-orb-sm {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.35), transparent 70%);
+    transform: translateX(-50%);
+    filter: blur(40px);
+    animation: driftGlow 14s ease-in-out infinite;
+  }
+  @keyframes driftGlow {
+    0%, 100% { transform: translate(-50%, 0) scale(1); }
+    50%      { transform: translate(-42%, 4%) scale(1.08); }
+  }
+  .hero-fade { animation: heroFade 0.7s ease-out both; }
+  .hero-fade.d1 { animation-delay: 0.05s; }
+  .hero-fade.d2 { animation-delay: 0.15s; }
+  @keyframes heroFade {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .section-card { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+  .section-card:hover { border-color: rgba(99, 102, 241, 0.4); }
+  @media (prefers-reduced-motion: reduce) {
+    .glow-orb-sm, .hero-fade { animation: none; }
+  }
+</style>
+
+<!-- ============ HERO (HUD Gelap, versi ringkas) ============ -->
+<section class="relative -mx-4 sm:-mx-8 lg:-mx-16 -mt-3 mb-10 overflow-hidden bg-[#0F0E24] rounded-b-3xl">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="glow-orb-sm"></div>
+  </div>
+
+  <div class="relative max-w-3xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 sm:pt-16 pb-10 text-center">
+    <span class="hero-fade inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-indigo-300/90 border border-indigo-400/30 rounded-full px-4 py-1.5 bg-indigo-500/10">
+      Universitas Nusa Putra Sukabumi
+    </span>
+
+    <h1 class="hero-fade d1 font-display font-bold text-3xl sm:text-5xl leading-[1.1] mt-6 text-white tracking-tight">
+      Tentang<br />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300">Penelitian Ini</span>
+    </h1>
+
+    <p class="hero-fade d2 text-indigo-100/60 text-sm sm:text-base max-w-xl mx-auto mt-5 leading-relaxed">
+      Program Studi Teknik Informatika — mempelajari hubungan antara pola
+      kebiasaan bermain Mobile Legends dan tingkat stres pemain menggunakan
+      pendekatan machine learning.
+    </p>
+  </div>
+</section>
+
+<div class="pb-12">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+    <!-- Tujuan Penelitian -->
+    <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-2xl">🎯</span>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B]">Tujuan Penelitian</h3>
+      </div>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        Memprediksi tingkat stres pemain Mobile Legends berdasarkan pola
+        kebiasaan bermain menggunakan algoritma Random Forest.
+      </p>
+    </div>
+
+    <!-- Instrumen PSS-10 -->
+    <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-2xl">📋</span>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B]">Instrumen PSS-10</h3>
+      </div>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        Perceived Stress Scale (PSS-10) adalah instrumen tervalidasi secara
+        ilmiah untuk mengukur tingkat stres melalui 10 pertanyaan berskala
+        0–4. Instrumen ini digunakan pada tahap pengumpulan data untuk
+        melatih model — pengguna sistem tidak perlu mengisinya lagi saat
+        melakukan prediksi.
+      </p>
+    </div>
+
+    <!-- Algoritma Random Forest -->
+    <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-2xl">🌲</span>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B]">Algoritma Random Forest</h3>
+      </div>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        Metode ensemble learning yang menggabungkan banyak decision tree
+        untuk menghasilkan prediksi yang lebih akurat dan stabil dibanding
+        model tunggal.
+      </p>
+    </div>
+
+    <!-- Data & Variabel -->
+    <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-2xl">📊</span>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B]">Data & Variabel</h3>
+      </div>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        12 variabel digunakan sebagai input model, mencakup usia, jenis
+        kelamin, status utama, durasi sesi, frekuensi bermain per hari,
+        waktu bermain, win rate, kekalahan beruntun, orientasi bermain,
+        mode game, cara bermain, dan rank.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Profil Peneliti -->
+  <div class="section-card bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+    <div class="flex items-center gap-6">
+      <div class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center text-2xl font-display font-bold text-[#6366F1]">
+        MS
+      </div>
+      <div>
+        <p class="font-display text-lg font-bold text-[#1E1B4B]">Muhammad Sheva Adyaksa Rohendi</p>
+        <p class="text-gray-500 text-sm">Teknik Informatika • Universitas Nusa Putra Sukabumi</p>
+        <p class="text-gray-400 text-xs font-mono mt-1 tracking-wide">SKRIPSI · 2026</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catatan -->
+  <p class="text-[11px] text-gray-400 mt-6 text-center max-w-lg mx-auto leading-relaxed">
+    ⚠️ GamerStress adalah produk penelitian skripsi dan
+    <span class="font-medium">bukan alat diagnosis klinis</span>. Jika kamu
+    merasa mengalami stres berat, disarankan berkonsultasi dengan psikolog
+    atau tenaga profesional.
+  </p>
+
+</div>
+
+{% endblock %}
