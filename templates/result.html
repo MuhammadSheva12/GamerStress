@@ -215,6 +215,67 @@ endblock %} {% block content %}
         {% endif %}
       </div>
 
+      <!-- Penanggulangan -->
+      <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-[#6366F1] mb-1">Langkah Lanjutan</p>
+        <h3 class="font-display text-lg font-bold text-[#1E1B4B] mb-4">Penanggulangan</h3>
+
+        {% if hasil == 'Stres Rendah' %}
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Pertahankan keseimbangan antara bermain game dan aktivitas lain seperti istirahat, sosialisasi, dan akademik/pekerjaan.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Jaga jadwal tidur tetap teratur meski sedang asyik bermain, terutama saat sesi malam hari.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-emerald-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Kenali tanda-tanda tekanan sejak dini (mudah kesal, sulit fokus) supaya bisa diantisipasi sebelum berkembang.</span>
+          </li>
+        </ul>
+        {% elif hasil == 'Stres Sedang' %}
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <span class="text-amber-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Atur batas waktu bermain per sesi, misalnya maksimal 60–90 menit, lalu ambil jeda sebelum lanjut.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-amber-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Berhenti sejenak setelah mengalami kekalahan beruntun, hindari langsung push rank lagi dalam kondisi emosi tinggi.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-amber-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Selingi waktu bermain dengan aktivitas fisik ringan atau hobi lain di luar game.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-amber-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Bicarakan tekanan kompetitif dengan tim atau teman bermain, jangan dipendam sendiri.</span>
+          </li>
+        </ul>
+        {% else %}
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <span class="text-rose-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Kurangi frekuensi dan durasi bermain secara bertahap, terutama pada sesi ranked/kompetitif.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-rose-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Hindari bermain saat kondisi emosi sedang tidak stabil, misalnya setelah kalah beruntun atau sangat lelah.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-rose-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Cari aktivitas relaksasi di luar game, seperti olahraga ringan atau mengobrol dengan orang terdekat.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-rose-500 mt-0.5">✓</span>
+            <span class="text-gray-500 text-sm leading-relaxed">Jika tekanan terus terasa berat dan mulai mengganggu keseharian, pertimbangkan untuk berkonsultasi dengan psikolog atau tenaga profesional.</span>
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+
       <!-- Faktor Berpengaruh -->
       {% if faktor_list %}
       <div class="section-card bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
