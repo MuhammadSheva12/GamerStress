@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request
 import joblib
 import pandas as pd
@@ -256,13 +257,14 @@ def predict():
 
             faktor_list = get_faktor(request.form)
 
-            database.save_prediction(request.form, hasil, probabilitas)
+            kode_akses = database.save_prediction(request.form, hasil, probabilitas)
 
             return render_template(
                 "result.html",
                 hasil=hasil,
                 probabilitas=probabilitas,
-                faktor_list=faktor_list
+                faktor_list=faktor_list,
+                kode_akses=kode_akses
             )
 
         except KeyError as e:
@@ -287,8 +289,40 @@ def result():
         "result.html",
         hasil="-",
         probabilitas={},
-        faktor_list=[]
+        faktor_list=[],
+        kode_akses=None
     )
+
+
+@app.route("/cek-hasil", methods=["GET", "POST"])
+def cek_hasil():
+
+    if request.method == "POST":
+
+        kode_input = request.form.get("kode_akses", "")
+        row = database.get_prediction_by_kode(kode_input)
+
+        if row is None:
+            return render_template(
+                "cek_hasil.html",
+                error="Kode akses tidak ditemukan. Periksa kembali kode yang Anda masukkan."
+            )
+
+        hasil = row["hasil"]
+        probabilitas = json.loads(row["probabilitas"])
+        faktor_list = get_faktor(row)
+
+        return render_template(
+            "result.html",
+            hasil=hasil,
+            probabilitas=probabilitas,
+            faktor_list=faktor_list,
+            kode_akses=row["kode_akses"],
+            dari_cek_hasil=True,
+            tanggal_prediksi=row["created_at"]
+        )
+
+    return render_template("cek_hasil.html")
 
 
 @app.route("/dataset")

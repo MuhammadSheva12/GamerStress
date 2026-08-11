@@ -99,6 +99,13 @@ endblock %} {% block content %}
     </div>
   </section>
 
+  {% if dari_cek_hasil %}
+  <div class="max-w-3xl mx-auto mb-6 bg-indigo-50 border border-indigo-100 rounded-xl px-5 py-3 text-sm text-[#3730A3] flex items-center gap-2">
+    <span>🕓</span>
+    <span>Ini hasil prediksi yang tersimpan{% if tanggal_prediksi %} dari {{ tanggal_prediksi.strftime('%d %B %Y, %H:%M') }}{% endif %}.</span>
+  </div>
+  {% endif %}
+
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Kartu Hasil Utama -->
     <div
@@ -165,6 +172,19 @@ endblock %} {% block content %}
           </div>
         </div>
       </div>
+
+      {% if kode_akses %}
+      <!-- Kode Akses -->
+      <div class="w-full mt-4 pt-4 border-t border-gray-100 text-center">
+        <p class="text-[10px] font-mono uppercase tracking-widest text-gray-400 mb-2">Kode Akses Hasil Ini</p>
+        <p class="font-display text-2xl font-bold text-[#6366F1] tracking-[0.15em] mb-2">{{ kode_akses }}</p>
+        <p class="text-[11px] text-gray-400 leading-relaxed">
+          Simpan kode ini untuk membuka kembali hasil ini kapan saja lewat
+          halaman <a href="/cek-hasil" class="text-[#6366F1] hover:underline">Cek Hasil</a>.
+          Kode tidak dapat dipulihkan jika hilang.
+        </p>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Kartu Analisis & Saran -->

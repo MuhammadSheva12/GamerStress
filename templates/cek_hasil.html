@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% block title %}Cek Hasil - GamerStress{%
+endblock %} {% block content %}
+
+<style>
+  .glow-orb-sm {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.35),
+      transparent 70%
+    );
+    transform: translateX(-50%);
+    filter: blur(40px);
+    animation: driftGlow 14s ease-in-out infinite;
+  }
+  @keyframes driftGlow {
+    0%,
+    100% {
+      transform: translate(-50%, 0) scale(1);
+    }
+    50% {
+      transform: translate(-42%, 4%) scale(1.08);
+    }
+  }
+  .hero-fade {
+    animation: heroFade 0.7s ease-out both;
+  }
+  .hero-fade.d1 {
+    animation-delay: 0.05s;
+  }
+  .hero-fade.d2 {
+    animation-delay: 0.15s;
+  }
+  @keyframes heroFade {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow-orb-sm,
+    .hero-fade {
+      animation: none;
+    }
+  }
+</style>
+
+<!-- ============ HERO (HUD Gelap, versi ringkas) ============ -->
+<section
+  class="relative -mx-4 sm:-mx-8 lg:-mx-16 -mt-3 mb-10 overflow-hidden bg-[#0F0E24] rounded-b-3xl"
+>
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="glow-orb-sm"></div>
+  </div>
+
+  <div
+    class="relative max-w-3xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 sm:pt-16 pb-10 text-center"
+  >
+    <span
+      class="hero-fade inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] uppercase text-indigo-300/90 border border-indigo-400/30 rounded-full px-4 py-1.5 bg-indigo-500/10"
+    >
+      Cek Hasil
+    </span>
+
+    <h1
+      class="hero-fade d1 font-display font-bold text-3xl sm:text-5xl leading-[1.1] mt-6 text-white tracking-tight"
+    >
+      Buka Kembali<br />
+      <span
+        class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300"
+        >Hasil Prediksimu</span
+      >
+    </h1>
+
+    <p
+      class="hero-fade d2 text-indigo-100/60 text-sm sm:text-base max-w-xl mx-auto mt-5 leading-relaxed"
+    >
+      Masukkan kode akses yang diberikan setelah prediksi selesai untuk
+      melihat kembali hasilnya. Tidak perlu login atau identitas pribadi.
+    </p>
+  </div>
+</section>
+
+<div class="max-w-md mx-auto pb-6">
+  {% if error %}
+  <div
+    class="bg-rose-50 border border-rose-200 text-rose-600 text-sm rounded-lg px-4 py-3 mb-6"
+  >
+    ⚠️ {{ error }}
+  </div>
+  {% endif %}
+
+  <form
+    action="/cek-hasil"
+    method="POST"
+    class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm"
+  >
+    <label
+      class="block text-[11px] font-mono uppercase tracking-widest text-gray-400 mb-2"
+      >Kode Akses</label
+    >
+    <input
+      type="text"
+      name="kode_akses"
+      required
+      maxlength="8"
+      placeholder="Contoh: 7XK2P9QF"
+      class="w-full border border-gray-200 rounded-xl px-4 py-3 text-center font-mono text-lg tracking-[0.2em] uppercase text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#6366F1] focus:border-transparent mb-4"
+    />
+    <button
+      type="submit"
+      class="w-full bg-gradient-to-br from-[#1E1B4B] to-[#3730A3] hover:from-[#171337] hover:to-[#312a8a] text-white px-6 py-3 rounded-full font-semibold transition shadow-md text-sm"
+    >
+      Buka Hasil
+    </button>
+  </form>
+
+  <p class="text-[11px] text-gray-400 leading-relaxed text-center mt-4">
+    Kode akses diberikan sekali di halaman hasil setelah kamu mengisi
+    prediksi. Kode tidak dapat dipulihkan jika hilang.
+  </p>
+</div>
+
+{% endblock %}
